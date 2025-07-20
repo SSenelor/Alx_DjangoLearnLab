@@ -60,12 +60,11 @@ urlpatterns = [
 '''
 
 from django.urls import path
+from django.contrib.auth import views as auth_views # Import Django's built-in authentication views
 from .views import (
     list_books,
     LibraryDetailView,
-    user_login,
-    user_logout,
-    register,  # <--- Make sure 'register' is imported here
+    register,  # Ensure your custom 'register' view is imported
     admin_view,
     librarian_view,
     member_view,
@@ -84,10 +83,10 @@ urlpatterns = [
     # Library Detail URL
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
 
-    # Authentication URLs
-    path('login/', user_login, name='login'),
-    path('logout/', user_logout, name='logout'),
-    path('register/', register, name='register'), # <--- Add this line for registration
+    # Authentication URLs (Using Django's built-in views for login/logout)
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'), # Redirects to home after logout
+    path('register/', register, name='register'), # Your custom registration view
 
     # Role-Based URLs
     path('admin-role/', admin_view, name='admin_view'),
