@@ -60,36 +60,26 @@ urlpatterns = [
 '''
 
 from django.urls import path
-from django.contrib.auth import views as auth_views # Import Django's built-in authentication views
-from .views import (
-    list_books,
-    LibraryDetailView,
-    register,  # Ensure your custom 'register' view is imported
-    admin_view,
-    librarian_view,
-    member_view,
-    add_book,
-    edit_book,
-    delete_book,
-)
+from django.contrib.auth.views import LoginView, LogoutView  # Explicit named imports for checking
+from . import views  # Import your views.py module
 
 urlpatterns = [
     # Book Management URLs
-    path('books/', list_books, name='list_books'),
-    path('books/add/', add_book, name='add_book'),
-    path('books/edit/<int:pk>/', edit_book, name='edit_book'),
-    path('books/delete/<int:pk>/', delete_book, name='delete_book'),
+    path('books/', views.list_books, name='list_books'),
+    path('books/add/', views.add_book, name='add_book'),
+    path('books/edit/<int:pk>/', views.edit_book, name='edit_book'),
+    path('books/delete/<int:pk>/', views.delete_book, name='delete_book'),
 
     # Library Detail URL
-    path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
+    path('library/<int:pk>/', views.LibraryDetailView.as_view(), name='library_detail'),
 
-    # Authentication URLs (Using Django's built-in views for login/logout)
-    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'), # Redirects to home after logout
-    path('register/', register, name='register'), # Your custom registration view
+    # Authentication URLs (Login, Logout, Register)
+    path('login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('register/', views.register, name='register'),
 
-    # Role-Based URLs
-    path('admin-role/', admin_view, name='admin_view'),
-    path('librarian-role/', librarian_view, name='librarian_view'),
-    path('member-role/', member_view, name='member_view'),
+    # Role-Based Views
+    path('admin-role/', views.admin_view, name='admin_view'),
+    path('librarian-role/', views.librarian_view, name='librarian_view'),
+    path('member-role/', views.member_view, name='member_view'),
 ]
