@@ -28,11 +28,11 @@ print(f"Librarian of {library.name}: {librarian.name}")
 import os
 import django
 
-# Setup Django environment if running outside manage.py shell
+# Setup Django environment if running outside of Django shell
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings')
 django.setup()
 
-from relationship_app.models import Author, Book, Library
+from relationship_app.models import Author, Book, Library, Librarian
 
 # 1. Query all books by a specific author
 author_name = "Chinua Achebe"
@@ -55,10 +55,12 @@ try:
         print(f"- {book.title} by {book.author.name}")
 except Library.DoesNotExist:
     print(f"Library '{library_name}' not found.")
+    library = None
 
 # 3. Retrieve the librarian for a library
-try:
-    librarian = library.librarian
-    print(f"\nLibrarian of {library.name}: {librarian.name}")
-except Exception as e:
-    print(f"Could not retrieve librarian: {e}")
+if library:
+    try:
+        librarian = Librarian.objects.get(library=library)
+        print(f"\nLibrarian of {library.name}: {librarian.name}")
+    except Librarian.DoesNotExist:
+        print(f"No librarian assigned to {library.name}.")
