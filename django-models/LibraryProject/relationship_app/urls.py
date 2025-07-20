@@ -59,14 +59,14 @@ urlpatterns = [
 ]
 '''
 
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from django.contrib.auth import views as auth_views # Import Django's built-in auth views
 from .views import (
     list_books,
     LibraryDetailView,
-    user_login,
-    user_logout,
-    register,
+    user_login,  # If you have a custom user_login view, keep it
+    user_logout, # If you have a custom user_logout view, keep it
+    register,    # Your custom registration view
     admin_view,
     librarian_view,
     member_view,
@@ -76,14 +76,6 @@ from .views import (
 )
 
 urlpatterns = [
-    # Admin URL
-    path('admin/', admin.site.urls),
-
-    # Application-specific URLs (assuming 'relationship_app' is your app name)
-    # If this is your main project urls.py, you might not need this 'include'.
-    # If these URLs are intended for an app, they should be in that app's urls.py
-    # path('', include('relationship_app.urls')), # Uncomment if this is the project urls.py and you're including app urls
-
     # Book Management URLs
     path('books/', list_books, name='list_books'),
     path('books/add/', add_book, name='add_book'),
@@ -93,10 +85,20 @@ urlpatterns = [
     # Library Detail URL
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
 
-    # Authentication URLs
+    # Custom Authentication URLs (if you prefer your own views for more control)
+    # If you have custom user_login and user_logout views, use these:
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
-    path('register/', register, name='register'),
+    path('register/', register, name='register'), # Your custom register view
+
+    # OR, use Django's built-in authentication views (more common for login/logout)
+    # Uncomment and use these if you want to leverage Django's default login/logout views.
+    # Make sure to create 'registration/login.html' and 'registration/logged_out.html' templates.
+    # path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    # path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    # Note: For LogoutView, 'next_page' redirects after logout. You might want a 'logged_out.html' template too.
+    # path('logout/', auth_views.LogoutView.as_view(template_name='registration/logged_out.html'), name='logout'),
+
 
     # Role-Based URLs
     path('admin-role/', admin_view, name='admin_view'),
