@@ -60,22 +60,22 @@ urlpatterns = [
 '''
 
 from django.urls import path
-from django.contrib.auth.views import LoginView, LogoutView  # Explicit named imports for checking
-from . import views  # Import your views.py module
+from django.contrib.auth.views import LoginView, LogoutView
+from . import views
 
 urlpatterns = [
-    # Book Management URLs
+    # Book Management
     path('books/', views.list_books, name='list_books'),
     path('books/add/', views.add_book, name='add_book'),
     path('books/edit/<int:pk>/', views.edit_book, name='edit_book'),
     path('books/delete/<int:pk>/', views.delete_book, name='delete_book'),
 
-    # Library Detail URL
+    # Library Detail
     path('library/<int:pk>/', views.LibraryDetailView.as_view(), name='library_detail'),
 
-    # Authentication URLs (Login, Logout, Register)
+    # Authentication
     path('login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('logout/', LogoutView.as_view(template_name='registration/logged_out.html'), name='logout'),
     path('register/', views.register, name='register'),
 
     # Role-Based Views
