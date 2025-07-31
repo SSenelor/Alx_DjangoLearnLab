@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,3 +15,21 @@
     <a href="{% url 'list_books' %}">Back to book list</a>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ action }} Book</title>
+</head>
+<body>
+    <h1>{{ action }} Book</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{{ action }} Book</button>
+    </form>
+    <a href="{% url 'list_books' %}">Back to book list</a>
+</body>
+</html>
+>>>>>>> f36242daa0bd743ab358d08120859cfdb2977878
